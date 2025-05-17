@@ -1,9 +1,9 @@
-import "./App.css";
+import RegisterForm from "./registerForm.jsx";
 
 function App() {
   return (
     <>
-      <h1>Hello world!</h1>
+      <RegisterForm></RegisterForm>
     </>
   );
 }
