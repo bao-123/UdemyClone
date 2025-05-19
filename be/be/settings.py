@@ -13,19 +13,20 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
-# Load environment variables from .env file
-load_dotenv(dotenv_path="./.env")
-load_dotenv(dotenv_path="E:/BaoBao/vscodeProject/.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
+load_dotenv("E:/BaoBao/vscodeProject/.env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dt3mu)y5bqjwc_tu#k8_=9rh9yyu14ml0wq!k(&4yy$$vvz7@a'
+SECRET_KEY = 'django-insecure-3=!(a&88x!#dtoh=bc40+8i!)9$6^$2)7&gke%=4ph1krqy_qn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +60,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'be.urls'
 
 TEMPLATES = [
@@ -86,11 +88,11 @@ WSGI_APPLICATION = 'be.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('POSTGRE_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': os.getenv("DB_NAME"),
+        "USER": os.getenv("POSTGRE_USERNAME"),
+        "PASSWORD": os.getenv("POSTGRE_PASSWORD"),
+        "HOST": "localhost",
+        "PORT": os.getenv("DB_PORT")
     }
 }
 
@@ -125,7 +127,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+AUTH_USER_MODEL = "api.User"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
