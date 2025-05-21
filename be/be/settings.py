@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "api",
+    "django_extensions",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,6 +129,12 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = "api.User"
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
