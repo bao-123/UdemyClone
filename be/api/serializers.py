@@ -2,13 +2,45 @@ from rest_framework import serializers
 from .models import Product, User, Order, OrderItem
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "username", "email")
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("name", "description", "price", "stock")
+        fields = ("name", "price", "stock")
     
 
     def validate_price(self, value):
         if value <=0 :
-            raise serializers.ValidationErro("price must be greate than zero")
+            raise serializers.ValidationError("price must be greate than zero")
         return value
+    
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product_price = serializers.DecimalField(source="product.price", max_digits=10, decimal_places=2)
+    product_name = serializers.CharField(source="product.name")
+
+    class Meta:
+        model = OrderItem
+        fields = ("product_name", "product_price", "quantity", "subtotal_price")
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+    user = UserSerializer(read_only=True)
+    total_price = serializers.SerializerMethodField(method_name="total")
+
+    def total(self, obj):
+        total_price = 0
+        items = obj.items.all()
+        for item in items:
+            total_price += item.subtotal_price
+        
+        return total_price
+        
+    class Meta:
+        model = Order
+        fields = ("order_id", "status", "created_at", "user", "items", "total_price")
+    

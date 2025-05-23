@@ -11,7 +11,7 @@ class Command(BaseCommand):
         #*Create superuser
         user = User.objects.filter(is_superuser=True).first()
         if not user:
-            User.objects.create_superuser(username="admin", password="test")
+            user = User.objects.create_superuser(username="admin", password="test")
         
         #*Sample products
         products = [
@@ -58,5 +58,5 @@ class Command(BaseCommand):
             #*Order with 1-6 products
             order = Order.objects.create(user=user)
             for product in sample(products, randint(1, len(products))):
-                OrderItem(order=order, product=product, quantity=randint(1, 5))
+                OrderItem.objects.create(order=order, product=product, quantity=randint(1, 5))
     
