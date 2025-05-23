@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("name", "price", "stock")
+        fields = ("id", "name", "price", "stock")
     
 
     def validate_price(self, value):
@@ -20,12 +20,11 @@ class ProductSerializer(serializers.ModelSerializer):
     
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product_price = serializers.DecimalField(source="product.price", max_digits=10, decimal_places=2)
-    product_name = serializers.CharField(source="product.name")
+    product = serializers.HyperlinkedIdentityField(view_name="product_info")
 
     class Meta:
         model = OrderItem
-        fields = ("product_name", "product_price", "quantity", "subtotal_price")
+        fields = ("product", "quantity", "subtotal_price")
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)

@@ -15,8 +15,8 @@ def product_list(request):
 
 
 @api_view(["GET"])
-def product_info(request, id):
-    product = get_object_or_404(Product, pk=id)
+def product_info(request, pk):
+    product = get_object_or_404(Product, pk=pk)
     serializer = ProductSerializer(product)
     
     return Response(serializer.data)
@@ -25,6 +25,6 @@ def product_info(request, id):
 @api_view(["GET"])
 def order_list(request):
     orders = Order.objects.all()
-    serializer = OrderSerializer(orders, many=True)
+    serializer = OrderSerializer(orders, many=True, context={"request": request})
 
     return Response(serializer.data)
