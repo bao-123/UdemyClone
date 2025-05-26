@@ -35,5 +35,8 @@ class UserOrderListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user=self.request.user)
+        user = get_object_or_404(User, pk=self.kwargs['user_pk'])
+        if not user:
+            return None
+        return qs.filter(user=user)
 
