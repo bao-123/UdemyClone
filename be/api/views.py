@@ -4,32 +4,36 @@ from api.models import Product, User, Order, OrderItem
 from api.serializers import ProductSerializer, ProductInfoSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
+from rest_framework import generics, permissions
 # Create your views here.
 
 
-@api_view(["GET"])
-def product_list(request):
-    products = Product.objects.all()
-    serializer = ProductInfoSerializer({
-        "products": products,
-        "count": products.count(),
-        "max_price": products.aggregate(max_price=Max("price"))["max_price"]
-    })
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    #permission_classes = [permissions.IsAuthenticated]
 
-    return Response(serializer.data)
+#-i Using RetrieveAPIView for getting a product based on provided pk
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    #*The view will get the product in the base queryset (here is every Product object)
+    queryset = Product.objects.all()
 
-
-@api_view(["GET"])
-def product_info(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    serializer = ProductSerializer(product)
-    
-    return Response(serializer.data)
+    serializer_class = ProductSerializer
 
 
-@api_view(["GET"])
-def order_list(request):
-    orders = Order.objects.prefetch_related("user", "items", "items__product").all()
-    serializer = OrderSerializer(orders, many=True, context={"request": request})
+class OrderListAPIView(generics.ListAPIView):
+    queryset = Order.objects.prefetch_related("items__product", "user").all()
+    serializer_class = OrderSerializer
 
-    return Response(serializer.data)
+
+class UserOrderListAPIView(generics.ListAPIView):
+    queryset = Order.objects.prefetch_related("items__product", "user").all()
+    serializer_class = OrderSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user)
+

@@ -35,7 +35,7 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str__(self):
+    def __str__(self):
         return f"{self.order_id}| user: {self.user.username} | {self.status} | {self.created_at}"
     
 
@@ -51,4 +51,5 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.product.name}| {self.quantity} | {self.subtotal_price}$"
+
 

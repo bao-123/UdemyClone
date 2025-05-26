@@ -20,11 +20,12 @@ class ProductSerializer(serializers.ModelSerializer):
     
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = serializers.HyperlinkedIdentityField(view_name="product_info")
+    product = serializers.HyperlinkedRelatedField(view_name="product_info", read_only=True)
 
     class Meta:
         model = OrderItem
         fields = ("product", "quantity", "subtotal_price")
+
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
